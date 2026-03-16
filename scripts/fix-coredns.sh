@@ -29,10 +29,10 @@ if [ -z "$CLUSTER" ]; then
   exit 1
 fi
 
-# Get the container's default gateway IP — this is reachable from k3s pods
-# and routes through Docker to the host's DNS. Do NOT use /etc/resolv.conf
-# which has 127.0.0.11 (Docker embedded DNS, unreachable from pods).
-GATEWAY_IP=$(docker exec "$CLUSTER" ip route | grep default | awk '{print $3}')
+# Get the container's upstream DNS from /etc/resolv.conf — this is the address
+# the Docker/Colima VM uses for DNS and is reachable from k3s pods.
+# The docker bridge gateway (172.17.0.1) does NOT serve DNS in Colima.
+GATEWAY_IP=$(docker exec "$CLUSTER" grep nameserver /etc/resolv.conf | head -1 | awk '{print $2}')
 if [ -z "$GATEWAY_IP" ]; then
   echo "ERROR: Could not determine container gateway IP."
   exit 1

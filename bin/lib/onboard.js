@@ -104,11 +104,12 @@ async function startGateway(gpu) {
     require("child_process").spawnSync("sleep", ["2"]);
   }
 
-  // CoreDNS fix for Colima
-  const colimaSocket = path.join(process.env.HOME || "/tmp", ".colima/default/docker.sock");
-  if (fs.existsSync(colimaSocket)) {
-    console.log("  Patching CoreDNS for Colima...");
+  // CoreDNS fix — always run on macOS (Colima and Docker Desktop both need it)
+  if (process.platform === "darwin") {
+    console.log("  Patching CoreDNS for macOS Docker...");
     run(`bash "${path.join(SCRIPTS, "fix-coredns.sh")}" 2>&1 || true`, { ignoreError: true });
+    // Give DNS a moment to propagate
+    require("child_process").spawnSync("sleep", ["5"]);
   }
 }
 
