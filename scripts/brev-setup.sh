@@ -119,6 +119,9 @@ VLLM_MODEL="nvidia/nemotron-3-nano-30b-a3b"
 if command -v nvidia-smi > /dev/null 2>&1; then
   if ! python3 -c "import vllm" 2>/dev/null; then
     info "Installing vLLM..."
+    if ! command -v pip3 > /dev/null 2>&1; then
+      sudo apt-get install -y -qq python3-pip > /dev/null 2>&1
+    fi
     pip3 install --break-system-packages vllm 2>&1 | tail -1 || pip3 install vllm 2>&1 | tail -1
     info "vLLM installed"
   else
