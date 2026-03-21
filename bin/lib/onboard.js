@@ -89,6 +89,13 @@ function shellQuote(value) {
   return `'${String(value).replace(/'/g, `'\\''`)}'`;
 }
 
+function getStableGatewayImageRef(versionOutput = null) {
+  const output = versionOutput || runCapture("openshell -V", { ignoreError: true });
+  const match = output.match(/openshell\s+([0-9]+\.[0-9]+\.[0-9]+)/i);
+  if (!match) return null;
+  return `ghcr.io/nvidia/openshell/cluster:${match[1]}`;
+}
+
 function pythonLiteralJson(value) {
   return JSON.stringify(JSON.stringify(value));
 }
@@ -373,8 +380,17 @@ async function startGateway(gpu) {
   // sandbox itself does not need direct GPU access. Passing --gpu causes
   // FailedPrecondition errors when the gateway's k3s device plugin cannot
   // allocate GPUs. See: https://build.nvidia.com/spark/nemoclaw/instructions
+  const gatewayEnv = {};
+  const stableGatewayImage = getStableGatewayImageRef();
+  if (stableGatewayImage) {
+    gatewayEnv.OPENSHELL_CLUSTER_IMAGE = stableGatewayImage;
+    console.log(`  Using pinned OpenShell gateway image: ${stableGatewayImage}`);
+  }
 
-  run(`openshell gateway start ${gwArgs.join(" ")}`, { ignoreError: false });
+  run(`openshell gateway start ${gwArgs.join(" ")}`, {
+    ignoreError: false,
+    env: gatewayEnv,
+  });
 
   // Verify health
   for (let i = 0; i < 5; i++) {
@@ -964,4 +980,11 @@ async function onboard(opts = {}) {
   printDashboard(sandboxName, model, provider);
 }
 
-module.exports = { buildSandboxConfigSyncScript, hasStaleGateway, isSandboxReady, onboard, setupNim };
+module.exports = {
+  buildSandboxConfigSyncScript,
+  getStableGatewayImageRef,
+  hasStaleGateway,
+  isSandboxReady,
+  onboard,
+  setupNim,
+};
