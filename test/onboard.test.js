@@ -4,7 +4,11 @@
 const { describe, it } = require("node:test");
 const assert = require("node:assert/strict");
 
-const { buildSandboxConfigSyncScript, getStableGatewayImageRef } = require("../bin/lib/onboard");
+const {
+  buildSandboxConfigSyncScript,
+  getInstalledOpenshellVersion,
+  getStableGatewayImageRef,
+} = require("../bin/lib/onboard");
 
 describe("onboard helpers", () => {
   it("builds a sandbox sync script that writes config and updates the selected model", () => {
@@ -30,6 +34,9 @@ describe("onboard helpers", () => {
   });
 
   it("pins the gateway image to the installed OpenShell release version", () => {
+    assert.equal(getInstalledOpenshellVersion("openshell 0.0.12"), "0.0.12");
+    assert.equal(getInstalledOpenshellVersion("openshell 0.0.13-dev.8+gbbcaed2ea"), "0.0.13");
+    assert.equal(getInstalledOpenshellVersion("bogus"), null);
     assert.equal(
       getStableGatewayImageRef("openshell 0.0.12"),
       "ghcr.io/nvidia/openshell/cluster:0.0.12"

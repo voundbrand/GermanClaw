@@ -89,11 +89,17 @@ function shellQuote(value) {
   return `'${String(value).replace(/'/g, `'\\''`)}'`;
 }
 
-function getStableGatewayImageRef(versionOutput = null) {
+function getInstalledOpenshellVersion(versionOutput = null) {
   const output = String(versionOutput ?? runCapture("openshell -V", { ignoreError: true })).trim();
   const match = output.match(/openshell\s+([0-9]+\.[0-9]+\.[0-9]+)/i);
   if (!match) return null;
-  return `ghcr.io/nvidia/openshell/cluster:${match[1]}`;
+  return match[1];
+}
+
+function getStableGatewayImageRef(versionOutput = null) {
+  const version = getInstalledOpenshellVersion(versionOutput);
+  if (!version) return null;
+  return `ghcr.io/nvidia/openshell/cluster:${version}`;
 }
 
 function pythonLiteralJson(value) {
@@ -381,9 +387,13 @@ async function startGateway(gpu) {
   // FailedPrecondition errors when the gateway's k3s device plugin cannot
   // allocate GPUs. See: https://build.nvidia.com/spark/nemoclaw/instructions
   const gatewayEnv = {};
-  const stableGatewayImage = getStableGatewayImageRef();
-  if (stableGatewayImage) {
+  const openshellVersion = getInstalledOpenshellVersion();
+  const stableGatewayImage = openshellVersion
+    ? `ghcr.io/nvidia/openshell/cluster:${openshellVersion}`
+    : null;
+  if (stableGatewayImage && openshellVersion) {
     gatewayEnv.OPENSHELL_CLUSTER_IMAGE = stableGatewayImage;
+    gatewayEnv.IMAGE_TAG = openshellVersion;
     console.log(`  Using pinned OpenShell gateway image: ${stableGatewayImage}`);
   }
 
@@ -982,6 +992,7 @@ async function onboard(opts = {}) {
 
 module.exports = {
   buildSandboxConfigSyncScript,
+  getInstalledOpenshellVersion,
   getStableGatewayImageRef,
   hasStaleGateway,
   isSandboxReady,
