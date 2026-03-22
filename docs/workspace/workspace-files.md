@@ -79,7 +79,7 @@ You can edit them in two ways:
 1. **Let the agent do it** — Ask your agent to update its persona, memory, or user context during a session.
 2. **Edit manually** — Use `openshell sandbox connect` to open a terminal inside the sandbox and edit files directly, or use `openshell sandbox upload` to push edited files from your host.
 
-## Related Topics
+## Next Steps
 
 - [Back Up and Restore workspace files](backup-restore.md)
 - [Commands reference](../reference/commands.md)

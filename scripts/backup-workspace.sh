@@ -41,7 +41,8 @@ do_backup() {
     local dest="${BACKUP_BASE}/${ts}"
 
     mkdir -p "$BACKUP_BASE"
-    chmod 0700 "${HOME}/.nemoclaw" "$BACKUP_BASE" 2>/dev/null || true
+    chmod 0700 "${HOME}/.nemoclaw" "$BACKUP_BASE" || \
+        fail "Failed to set secure permissions on ${HOME}/.nemoclaw — check directory ownership."
     mkdir -p "$dest"
     chmod 0700 "$dest"
 

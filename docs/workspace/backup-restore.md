@@ -119,7 +119,7 @@ $ openshell sandbox connect my-assistant
 $ ls -la /sandbox/.openclaw/workspace/
 ```
 
-## Related Topics
+## Next Steps
 
 - [Workspace Files overview](workspace-files.md) — learn what each file does
 - [Commands reference](../reference/commands.md)
