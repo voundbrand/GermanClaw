@@ -347,6 +347,11 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../monitoring/monitor-sandbox-activity.html">Monitor Sandbox Activity</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Workspace</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../workspace/workspace-files.html">Workspace Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../workspace/backup-restore.html">Back Up and Restore</a></li>
+</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
@@ -465,10 +470,6 @@ The sandbox does not receive your raw OpenAI, Anthropic, Gemini, or NVIDIA API k
 <td><p>OpenAI-compatible</p></td>
 <td><p>Uses Google’s OpenAI-compatible endpoint</p></td>
 </tr>
-<tr class="row-even"><td><p>Local Ollama</p></td>
-<td><p>OpenAI-compatible</p></td>
-<td><p>Local Ollama runtime routed through <code class="docutils literal notranslate"><span class="pre">inference.local</span></code></p></td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -490,13 +491,13 @@ NemoClaw validates by sending a real inference request, because many proxies do 
 </section>
 <section id="local-providers">
 <h2>Local Providers<a class="headerlink" href="#local-providers" title="Link to this heading">#</a></h2>
-<p>Some local providers use the same routed <code class="docutils literal notranslate"><span class="pre">inference.local</span></code> pattern, but the upstream runtime is local to the host.</p>
+<p>Local providers are available behind the <code class="docutils literal notranslate"><span class="pre">NEMOCLAW_EXPERIMENTAL=1</span></code> gate.
+These use the same routed <code class="docutils literal notranslate"><span class="pre">inference.local</span></code> pattern, but the upstream runtime is local to the host.</p>
 <ul class="simple">
 <li><p>Local Ollama</p></li>
 <li><p>Local NVIDIA NIM</p></li>
 <li><p>Local vLLM</p></li>
 </ul>
-<p>Only Local NVIDIA NIM and Local vLLM are behind the <code class="docutils literal notranslate"><span class="pre">NEMOCLAW_EXPERIMENTAL=1</span></code> gate.</p>
 <p>Ollama gets additional onboarding help:</p>
 <ul class="simple">
 <li><p>if no models are installed, NemoClaw offers starter models</p></li>

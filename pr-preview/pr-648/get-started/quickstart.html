@@ -347,6 +347,11 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../monitoring/monitor-sandbox-activity.html">Monitor Sandbox Activity</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Workspace</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../workspace/workspace-files.html">Workspace Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../workspace/backup-restore.html">Back Up and Restore</a></li>
+</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../reference/architecture.html">Architecture</a></li>
@@ -416,6 +421,7 @@
 -->
 <section class="tex2jax_ignore mathjax_ignore" id="quickstart">
 <h1>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading">#</a></h1>
+<!-- markdownlint-disable MD041 -->
 <div class="admonition-alpha-software admonition">
 <p class="admonition-title">Alpha software</p>
 <p>NemoClaw is in alpha, available as an early preview since March 16, 2026.
@@ -531,16 +537,16 @@ The script installs Node.js if it is not already present, then runs the guided o
 <p>If you use nvm or fnm to manage Node.js, the installer may not update your current shell’s PATH.
 If <code class="docutils literal notranslate"><span class="pre">nemoclaw</span></code> is not found after install, run <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">~/.bashrc</span></code> (or <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">~/.zshrc</span></code> for zsh) or open a new terminal.</p>
 <p>When the install completes, a summary confirms the running environment:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">──────────────────────────────────────────────────</span>
-<span class="go">Sandbox      my-assistant (Landlock + seccomp + netns)</span>
-<span class="go">Model        nvidia/nemotron-3-super-120b-a12b (NVIDIA Endpoint API)</span>
-<span class="go">──────────────────────────────────────────────────</span>
-<span class="go">Run:         nemoclaw my-assistant connect</span>
-<span class="go">Status:      nemoclaw my-assistant status</span>
-<span class="go">Logs:        nemoclaw my-assistant logs --follow</span>
-<span class="go">──────────────────────────────────────────────────</span>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>──────────────────────────────────────────────────
+Sandbox      my-assistant (Landlock + seccomp + netns)
+Model        nvidia/nemotron-3-super-120b-a12b (NVIDIA Endpoints)
+──────────────────────────────────────────────────
+Run:         nemoclaw my-assistant connect
+Status:      nemoclaw my-assistant status
+Logs:        nemoclaw my-assistant logs --follow
+──────────────────────────────────────────────────
 
-<span class="go">[INFO]  === Installation complete ===</span>
+[INFO]  === Installation complete ===
 </pre></div>
 </div>
 </section>

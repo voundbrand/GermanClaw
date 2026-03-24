@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Troubleshooting &#8212; NVIDIA NemoClaw Developer Guide</title>
+    <title>Back Up and Restore Workspace Files &#8212; NVIDIA NemoClaw Developer Guide</title>
   
   
   
@@ -52,14 +52,14 @@
     <script src="../_static/copybutton.js?v=6dbb43f8"></script>
     <script src="../_static/search-assets.bundle.js?v=00e3e057"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/troubleshooting';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'workspace/backup-restore';</script>
 
-    <link rel="canonical" href="https://docs.nvidia.com/nemoclaw/latest/reference/troubleshooting.html" />
+    <link rel="canonical" href="https://docs.nvidia.com/nemoclaw/latest/workspace/backup-restore.html" />
     <link rel="icon" href="../_static/favicon.png"/>
 
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="License" href="../resources/license.html" />
-    <link rel="prev" title="Network Policies" href="network-policies.html" />
+    <link rel="next" title="Architecture" href="../reference/architecture.html" />
+    <link rel="prev" title="Workspace Files" href="workspace-files.html" />
 
 
 
@@ -348,17 +348,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../monitoring/monitor-sandbox-activity.html">Monitor Sandbox Activity</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Workspace</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../workspace/workspace-files.html">Workspace Files</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../workspace/backup-restore.html">Back Up and Restore</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="workspace-files.html">Workspace Files</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Back Up and Restore</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands</a></li>
-<li class="toctree-l1"><a class="reference internal" href="inference-profiles.html">Inference Profiles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="network-policies.html">Network Policies</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Troubleshooting</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../reference/architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/commands.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/inference-profiles.html">Inference Profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/network-policies.html">Network Policies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Resources</span></p>
 <ul class="nav bd-sidenav">
@@ -398,7 +398,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Troubleshooting</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Back Up and Restore Workspace Files</span></li>
   </ul>
 </nav>
 </div>
@@ -419,153 +419,109 @@
   SPDX-FileCopyrightText: Copyright (c) 2025-2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
   SPDX-License-Identifier: Apache-2.0
 -->
-<!-- markdownlint-disable MD014 -->
-<section class="tex2jax_ignore mathjax_ignore" id="troubleshooting">
-<h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">#</a></h1>
-<p>This page covers common issues you may encounter when installing, onboarding, or running NemoClaw, along with their resolution steps.</p>
-<div class="tip admonition">
-<p class="admonition-title">Get Help</p>
-<p>If your issue is not listed here, join the <a class="reference external" href="https://discord.gg/XFpfPv9Uvx" rel="noreferer noopener" target="_blank">NemoClaw Discord channel</a> to ask questions and get help from the community. You can also <a class="reference external" href="https://github.com/NVIDIA/NemoClaw/issues/new" rel="noreferer noopener" target="_blank">file an issue on GitHub</a>.</p>
-</div>
-<section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
-<section id="nemoclaw-not-found-after-install">
-<h3><code class="docutils literal notranslate"><span class="pre">nemoclaw</span></code> not found after install<a class="headerlink" href="#nemoclaw-not-found-after-install" title="Link to this heading">#</a></h3>
-<p>If you use nvm or fnm to manage Node.js, the installer may not update your current shell’s PATH.
-The <code class="docutils literal notranslate"><span class="pre">nemoclaw</span></code> binary is installed but the shell session does not know where to find it.</p>
-<p>Run <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">~/.bashrc</span></code> (or <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">~/.zshrc</span></code> for zsh), or open a new terminal window.</p>
+<section class="tex2jax_ignore mathjax_ignore" id="back-up-and-restore-workspace-files">
+<h1>Back Up and Restore Workspace Files<a class="headerlink" href="#back-up-and-restore-workspace-files" title="Link to this heading">#</a></h1>
+<p>Workspace files define your agent’s personality, memory, and user context.
+They persist across sandbox restarts but are <strong>permanently deleted</strong> when you run <code class="docutils literal notranslate"><span class="pre">nemoclaw</span> <span class="pre">&lt;name&gt;</span> <span class="pre">destroy</span></code>.</p>
+<p>This guide covers manual backup with CLI commands and an automated script.</p>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>A running NemoClaw sandbox (for backup) or a freshly created sandbox (for restore).</p></li>
+<li><p>The OpenShell CLI on your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p></li>
+<li><p>The sandbox name (shown by <code class="docutils literal notranslate"><span class="pre">nemoclaw</span> <span class="pre">list</span></code>).</p></li>
+</ul>
 </section>
-<section id="installer-fails-on-unsupported-platform">
-<h3>Installer fails on unsupported platform<a class="headerlink" href="#installer-fails-on-unsupported-platform" title="Link to this heading">#</a></h3>
-<p>The installer checks for a supported OS and architecture before proceeding.
-NemoClaw requires Linux Ubuntu 22.04 LTS or later.
-If you see an unsupported platform error, verify that you are running on a supported Linux distribution.</p>
+<section id="when-to-back-up">
+<h2>When to Back Up<a class="headerlink" href="#when-to-back-up" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Before running <code class="docutils literal notranslate"><span class="pre">nemoclaw</span> <span class="pre">&lt;name&gt;</span> <span class="pre">destroy</span></code>.</p></li>
+<li><p>Before major NemoClaw version upgrades.</p></li>
+<li><p>Periodically, if you have invested time customizing your agent.</p></li>
+</ul>
 </section>
-<section id="node-js-version-is-too-old">
-<h3>Node.js version is too old<a class="headerlink" href="#node-js-version-is-too-old" title="Link to this heading">#</a></h3>
-<p>NemoClaw requires Node.js 20 or later.
-If the installer exits with a Node.js version error, check your current version:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>node<span class="w"> </span>--version
-</pre></div>
-</div>
-<p>If the version is below 20, install a supported release.
-If you use nvm, run:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>nvm<span class="w"> </span>install<span class="w"> </span><span class="m">20</span>
-<span class="gp">$ </span>nvm<span class="w"> </span>use<span class="w"> </span><span class="m">20</span>
-</pre></div>
-</div>
-<p>Then re-run the installer.</p>
-</section>
-<section id="docker-is-not-running">
-<h3>Docker is not running<a class="headerlink" href="#docker-is-not-running" title="Link to this heading">#</a></h3>
-<p>The installer and onboard wizard require Docker to be running.
-If you see a Docker connection error, start the Docker daemon:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>docker
-</pre></div>
-</div>
-<p>On macOS with Docker Desktop, open the Docker Desktop application and wait for it to finish starting before retrying.</p>
-</section>
-<section id="npm-install-fails-with-permission-errors">
-<h3>npm install fails with permission errors<a class="headerlink" href="#npm-install-fails-with-permission-errors" title="Link to this heading">#</a></h3>
-<p>If <code class="docutils literal notranslate"><span class="pre">npm</span> <span class="pre">install</span></code> fails with an <code class="docutils literal notranslate"><span class="pre">EACCES</span></code> permission error, do not run npm with <code class="docutils literal notranslate"><span class="pre">sudo</span></code>.
-Instead, configure npm to use a directory you own:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span>~/.npm-global
-<span class="gp">$ </span>npm<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>prefix<span class="w"> </span>~/.npm-global
-<span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>~/.npm-global/bin:<span class="nv">$PATH</span>
-</pre></div>
-</div>
-<p>Add the <code class="docutils literal notranslate"><span class="pre">export</span></code> line to your <code class="docutils literal notranslate"><span class="pre">~/.bashrc</span></code> or <code class="docutils literal notranslate"><span class="pre">~/.zshrc</span></code> to make it permanent, then re-run the installer.</p>
-</section>
-<section id="port-already-in-use">
-<h3>Port already in use<a class="headerlink" href="#port-already-in-use" title="Link to this heading">#</a></h3>
-<p>The NemoClaw gateway uses port <code class="docutils literal notranslate"><span class="pre">18789</span></code> by default.
-If another process is already bound to this port, onboarding fails.
-Identify the conflicting process, verify it is safe to stop, and terminate it:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>lsof<span class="w"> </span>-i<span class="w"> </span>:18789
-<span class="gp">$ </span><span class="nb">kill</span><span class="w"> </span>&lt;PID&gt;
-</pre></div>
-</div>
-<p>If the process does not exit, use <code class="docutils literal notranslate"><span class="pre">kill</span> <span class="pre">-9</span> <span class="pre">&lt;PID&gt;</span></code> to force-terminate it.
-Then retry onboarding.</p>
-</section>
-</section>
-<section id="onboarding">
-<h2>Onboarding<a class="headerlink" href="#onboarding" title="Link to this heading">#</a></h2>
-<section id="cgroup-v2-errors-during-onboard">
-<h3>Cgroup v2 errors during onboard<a class="headerlink" href="#cgroup-v2-errors-during-onboard" title="Link to this heading">#</a></h3>
-<p>On Ubuntu 24.04, DGX Spark, and WSL2, Docker may not be configured for cgroup v2 delegation.
-The onboard preflight check detects this and fails with a clear error message.</p>
-<p>Run the Spark setup script to fix the Docker cgroup configuration, then retry onboarding:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>nemoclaw<span class="w"> </span>setup-spark
-<span class="gp">$ </span>nemoclaw<span class="w"> </span>onboard
+<section id="manual-backup">
+<h2>Manual Backup<a class="headerlink" href="#manual-backup" title="Link to this heading">#</a></h2>
+<p>Use <code class="docutils literal notranslate"><span class="pre">openshell</span> <span class="pre">sandbox</span> <span class="pre">download</span></code> to copy files from the sandbox to your host.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">SANDBOX</span><span class="o">=</span>my-assistant
+<span class="gp">$ </span><span class="nv">BACKUP_DIR</span><span class="o">=</span>~/.nemoclaw/backups/<span class="k">$(</span>date<span class="w"> </span>+%Y%m%d-%H%M%S<span class="k">)</span>
+<span class="gp">$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">&quot;</span>
+
+<span class="gp">$ </span>openshell<span class="w"> </span>sandbox<span class="w"> </span>download<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SANDBOX</span><span class="s2">&quot;</span><span class="w"> </span>/sandbox/.openclaw/workspace/SOUL.md<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/&quot;</span>
+<span class="gp">$ </span>openshell<span class="w"> </span>sandbox<span class="w"> </span>download<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SANDBOX</span><span class="s2">&quot;</span><span class="w"> </span>/sandbox/.openclaw/workspace/USER.md<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/&quot;</span>
+<span class="gp">$ </span>openshell<span class="w"> </span>sandbox<span class="w"> </span>download<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SANDBOX</span><span class="s2">&quot;</span><span class="w"> </span>/sandbox/.openclaw/workspace/IDENTITY.md<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/&quot;</span>
+<span class="gp">$ </span>openshell<span class="w"> </span>sandbox<span class="w"> </span>download<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SANDBOX</span><span class="s2">&quot;</span><span class="w"> </span>/sandbox/.openclaw/workspace/AGENTS.md<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/&quot;</span>
+<span class="gp">$ </span>openshell<span class="w"> </span>sandbox<span class="w"> </span>download<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SANDBOX</span><span class="s2">&quot;</span><span class="w"> </span>/sandbox/.openclaw/workspace/MEMORY.md<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/&quot;</span>
+<span class="gp">$ </span>openshell<span class="w"> </span>sandbox<span class="w"> </span>download<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SANDBOX</span><span class="s2">&quot;</span><span class="w"> </span>/sandbox/.openclaw/workspace/memory/<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/memory/&quot;</span>
 </pre></div>
 </div>
 </section>
-<section id="invalid-sandbox-name">
-<h3>Invalid sandbox name<a class="headerlink" href="#invalid-sandbox-name" title="Link to this heading">#</a></h3>
-<p>Sandbox names must follow RFC 1123 subdomain rules: lowercase alphanumeric characters and hyphens only, and must start and end with an alphanumeric character.
-Uppercase letters are automatically lowercased.</p>
-<p>If the name does not match these rules, the wizard exits with an error.
-Choose a name such as <code class="docutils literal notranslate"><span class="pre">my-assistant</span></code> or <code class="docutils literal notranslate"><span class="pre">dev1</span></code>.</p>
+<section id="manual-restore">
+<h2>Manual Restore<a class="headerlink" href="#manual-restore" title="Link to this heading">#</a></h2>
+<p>Use <code class="docutils literal notranslate"><span class="pre">openshell</span> <span class="pre">sandbox</span> <span class="pre">upload</span></code> to push files back into a sandbox.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">SANDBOX</span><span class="o">=</span>my-assistant
+<span class="gp">$ </span><span class="nv">BACKUP_DIR</span><span class="o">=</span>~/.nemoclaw/backups/20260320-120000<span class="w">  </span><span class="c1"># pick a timestamp</span>
+
+<span class="gp">$ </span>openshell<span class="w"> </span>sandbox<span class="w"> </span>upload<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SANDBOX</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/SOUL.md&quot;</span><span class="w"> </span>/sandbox/.openclaw/workspace/
+<span class="gp">$ </span>openshell<span class="w"> </span>sandbox<span class="w"> </span>upload<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SANDBOX</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/USER.md&quot;</span><span class="w"> </span>/sandbox/.openclaw/workspace/
+<span class="gp">$ </span>openshell<span class="w"> </span>sandbox<span class="w"> </span>upload<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SANDBOX</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/IDENTITY.md&quot;</span><span class="w"> </span>/sandbox/.openclaw/workspace/
+<span class="gp">$ </span>openshell<span class="w"> </span>sandbox<span class="w"> </span>upload<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SANDBOX</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/AGENTS.md&quot;</span><span class="w"> </span>/sandbox/.openclaw/workspace/
+<span class="gp">$ </span>openshell<span class="w"> </span>sandbox<span class="w"> </span>upload<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SANDBOX</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/MEMORY.md&quot;</span><span class="w"> </span>/sandbox/.openclaw/workspace/
+<span class="gp">$ </span>openshell<span class="w"> </span>sandbox<span class="w"> </span>upload<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SANDBOX</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/memory/&quot;</span><span class="w"> </span>/sandbox/.openclaw/workspace/memory/
+</pre></div>
+</div>
 </section>
-<section id="sandbox-creation-fails-on-dgx">
-<h3>Sandbox creation fails on DGX<a class="headerlink" href="#sandbox-creation-fails-on-dgx" title="Link to this heading">#</a></h3>
-<p>On DGX machines, sandbox creation can fail if the gateway’s DNS has not finished propagating or if a stale port forward from a previous onboard run is still active.</p>
-<p>Run <code class="docutils literal notranslate"><span class="pre">nemoclaw</span> <span class="pre">onboard</span></code> to retry.
-The wizard cleans up stale port forwards and waits for gateway readiness automatically.</p>
+<section id="using-the-backup-script">
+<h2>Using the Backup Script<a class="headerlink" href="#using-the-backup-script" title="Link to this heading">#</a></h2>
+<p>The repository includes a convenience script at <code class="docutils literal notranslate"><span class="pre">scripts/backup-workspace.sh</span></code>.</p>
+<section id="backup">
+<h3>Backup<a class="headerlink" href="#backup" title="Link to this heading">#</a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./scripts/backup-workspace.sh<span class="w"> </span>backup<span class="w"> </span>my-assistant
+<span class="go">Backing up workspace from sandbox &#39;my-assistant&#39;...</span>
+<span class="go">Backup saved to /home/user/.nemoclaw/backups/20260320-120000/ (6 items)</span>
+</pre></div>
+</div>
 </section>
-<section id="colima-socket-not-detected-macos">
-<h3>Colima socket not detected (macOS)<a class="headerlink" href="#colima-socket-not-detected-macos" title="Link to this heading">#</a></h3>
-<p>Newer Colima versions use the XDG base directory (<code class="docutils literal notranslate"><span class="pre">~/.config/colima/default/docker.sock</span></code>) instead of the legacy path (<code class="docutils literal notranslate"><span class="pre">~/.colima/default/docker.sock</span></code>).
-NemoClaw checks both paths.
-If neither is found, verify that Colima is running:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>colima<span class="w"> </span>status
+<section id="restore">
+<h3>Restore<a class="headerlink" href="#restore" title="Link to this heading">#</a></h3>
+<p>Restore from the most recent backup:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./scripts/backup-workspace.sh<span class="w"> </span>restore<span class="w"> </span>my-assistant
+</pre></div>
+</div>
+<p>Restore from a specific timestamp:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./scripts/backup-workspace.sh<span class="w"> </span>restore<span class="w"> </span>my-assistant<span class="w"> </span><span class="m">20260320</span>-120000
 </pre></div>
 </div>
 </section>
 </section>
-<section id="runtime">
-<h2>Runtime<a class="headerlink" href="#runtime" title="Link to this heading">#</a></h2>
-<section id="sandbox-shows-as-stopped">
-<h3>Sandbox shows as stopped<a class="headerlink" href="#sandbox-shows-as-stopped" title="Link to this heading">#</a></h3>
-<p>The sandbox may have been stopped or deleted.
-Run <code class="docutils literal notranslate"><span class="pre">nemoclaw</span> <span class="pre">onboard</span></code> to recreate the sandbox from the same blueprint and policy definitions.</p>
-</section>
-<section id="status-shows-not-running-inside-the-sandbox">
-<h3>Status shows “not running” inside the sandbox<a class="headerlink" href="#status-shows-not-running-inside-the-sandbox" title="Link to this heading">#</a></h3>
-<p>This is expected behavior.
-When checking status inside an active sandbox, host-side sandbox state and inference configuration are not inspectable.
-The status command detects the sandbox context and reports “active (inside sandbox)” instead.</p>
-<p>Run <code class="docutils literal notranslate"><span class="pre">openshell</span> <span class="pre">sandbox</span> <span class="pre">list</span></code> on the host to check the underlying sandbox state.</p>
-</section>
-<section id="inference-requests-time-out">
-<h3>Inference requests time out<a class="headerlink" href="#inference-requests-time-out" title="Link to this heading">#</a></h3>
-<p>Verify that the inference provider endpoint is reachable from the host.
-Check the active provider and endpoint:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>nemoclaw<span class="w"> </span>&lt;name&gt;<span class="w"> </span>status
+<section id="verifying-a-backup">
+<h2>Verifying a Backup<a class="headerlink" href="#verifying-a-backup" title="Link to this heading">#</a></h2>
+<p>List backed-up files to confirm completeness:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ls<span class="w"> </span>~/.nemoclaw/backups/20260320-120000/
+<span class="go">AGENTS.md</span>
+<span class="go">IDENTITY.md</span>
+<span class="go">MEMORY.md</span>
+<span class="go">SOUL.md</span>
+<span class="go">USER.md</span>
+<span class="go">memory/</span>
 </pre></div>
 </div>
-<p>If the endpoint is correct but requests still fail, check for network policy rules that may block the connection.
-Then verify the credential and base URL for the provider you selected during onboarding.</p>
 </section>
-<section id="agent-cannot-reach-an-external-host">
-<h3>Agent cannot reach an external host<a class="headerlink" href="#agent-cannot-reach-an-external-host" title="Link to this heading">#</a></h3>
-<p>OpenShell blocks outbound connections to hosts not listed in the network policy.
-Open the TUI to see blocked requests and approve them:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openshell<span class="w"> </span>term
+<section id="inspecting-files-inside-the-sandbox">
+<h2>Inspecting Files Inside the Sandbox<a class="headerlink" href="#inspecting-files-inside-the-sandbox" title="Link to this heading">#</a></h2>
+<p>Connect to the sandbox to list or view workspace files directly:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>openshell<span class="w"> </span>sandbox<span class="w"> </span>connect<span class="w"> </span>my-assistant
+<span class="gp">$ </span>ls<span class="w"> </span>-la<span class="w"> </span>/sandbox/.openclaw/workspace/
 </pre></div>
 </div>
-<p>To permanently allow an endpoint, add it to the network policy.
-Refer to <a class="reference internal" href="../network-policy/customize-network-policy.html"><span class="std std-doc">Customize the Network Policy</span></a> for details.</p>
 </section>
-<section id="blueprint-run-failed">
-<h3>Blueprint run failed<a class="headerlink" href="#blueprint-run-failed" title="Link to this heading">#</a></h3>
-<p>View the error output for the failed blueprint run:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>nemoclaw<span class="w"> </span>&lt;name&gt;<span class="w"> </span>logs
-</pre></div>
-</div>
-<p>Use <code class="docutils literal notranslate"><span class="pre">--follow</span></code> to stream logs in real time while debugging.</p>
-</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="workspace-files.html"><span class="std std-doc">Workspace Files overview</span></a> — learn what each file does</p></li>
+<li><p><a class="reference internal" href="../reference/commands.html"><span class="std std-doc">Commands reference</span></a></p></li>
+<li><p><a class="reference internal" href="../monitoring/monitor-sandbox-activity.html"><span class="std std-doc">Monitor Sandbox Activity</span></a></p></li>
+</ul>
 </section>
 </section>
 
@@ -580,20 +536,20 @@ Refer to <a class="reference internal" href="../network-policy/customize-network
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="network-policies.html"
+       href="workspace-files.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Network Policies</p>
+        <p class="prev-next-title">Workspace Files</p>
       </div>
     </a>
     <a class="right-next"
-       href="../resources/license.html"
+       href="../reference/architecture.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">License</p>
+        <p class="prev-next-title">Architecture</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -618,30 +574,18 @@ Refer to <a class="reference internal" href="../network-policy/customize-network
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nemoclaw-not-found-after-install"><code class="docutils literal notranslate"><span class="pre">nemoclaw</span></code> not found after install</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#installer-fails-on-unsupported-platform">Installer fails on unsupported platform</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#node-js-version-is-too-old">Node.js version is too old</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#docker-is-not-running">Docker is not running</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#npm-install-fails-with-permission-errors">npm install fails with permission errors</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#port-already-in-use">Port already in use</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when-to-back-up">When to Back Up</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-backup">Manual Backup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-restore">Manual Restore</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-backup-script">Using the Backup Script</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#backup">Backup</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#restore">Restore</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#onboarding">Onboarding</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cgroup-v2-errors-during-onboard">Cgroup v2 errors during onboard</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#invalid-sandbox-name">Invalid sandbox name</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sandbox-creation-fails-on-dgx">Sandbox creation fails on DGX</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#colima-socket-not-detected-macos">Colima socket not detected (macOS)</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#runtime">Runtime</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sandbox-shows-as-stopped">Sandbox shows as stopped</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#status-shows-not-running-inside-the-sandbox">Status shows “not running” inside the sandbox</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inference-requests-time-out">Inference requests time out</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#agent-cannot-reach-an-external-host">Agent cannot reach an external host</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#blueprint-run-failed">Blueprint run failed</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verifying-a-backup">Verifying a Backup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspecting-files-inside-the-sandbox">Inspecting Files Inside the Sandbox</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
 </ul>
   </nav></div>
 
