@@ -97,6 +97,49 @@ describe("CLI dispatch", () => {
     expect(r.out.includes("nemoclaw debug")).toBeTruthy();
   });
 
+  it("passes --follow through to openshell logs", () => {
+    const home = fs.mkdtempSync(path.join(os.tmpdir(), "nemoclaw-cli-logs-follow-"));
+    const localBin = path.join(home, "bin");
+    const registryDir = path.join(home, ".nemoclaw");
+    const markerFile = path.join(home, "logs-args");
+    fs.mkdirSync(localBin, { recursive: true });
+    fs.mkdirSync(registryDir, { recursive: true });
+    fs.writeFileSync(
+      path.join(registryDir, "sandboxes.json"),
+      JSON.stringify({
+        sandboxes: {
+          alpha: {
+            name: "alpha",
+            model: "test-model",
+            provider: "nvidia-prod",
+            gpuEnabled: false,
+            policies: [],
+          },
+        },
+        defaultSandbox: "alpha",
+      }),
+      { mode: 0o600 }
+    );
+    fs.writeFileSync(
+      path.join(localBin, "openshell"),
+      [
+        "#!/usr/bin/env bash",
+        `marker_file=${JSON.stringify(markerFile)}`,
+        "printf '%s ' \"$@\" > \"$marker_file\"",
+        "exit 0",
+      ].join("\n"),
+      { mode: 0o755 }
+    );
+
+    const r = runWithEnv("alpha logs --follow", {
+      HOME: home,
+      PATH: `${localBin}:${process.env.PATH || ""}`,
+    });
+
+    expect(r.code).toBe(0);
+    expect(fs.readFileSync(markerFile, "utf8")).toContain("logs alpha --follow");
+  });
+
   it("removes stale registry entries when connect targets a missing live sandbox", () => {
     const home = fs.mkdtempSync(path.join(os.tmpdir(), "nemoclaw-cli-stale-connect-"));
     const localBin = path.join(home, "bin");
