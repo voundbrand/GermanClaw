@@ -2,11 +2,11 @@
 # SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-# Double onboard: verify that consecutive `nemoclaw onboard` runs recover
-# automatically from stale state (gateway, port forward, registry entries)
-# left behind by a previous run.
+# Double onboard: verify that consecutive `nemoclaw onboard` runs can reuse
+# the shared NemoClaw gateway safely and preserve existing sandboxes instead of
+# destroying the prior session on every repeat run.
 #
-# Regression test for issues #21, #22, #140, #152, #397.
+# Regression test for issues #21, #22, #140, #152, #397, and #849.
 #
 # Key insight: running onboard without NVIDIA_API_KEY in non-interactive
 # mode causes process.exit(1) at step 4, but steps 1-3 (preflight,
@@ -172,10 +172,10 @@ else
   fail "Second onboard exited $exit2 (expected 1)"
 fi
 
-if grep -q "Cleaning up previous NemoClaw session" <<<"$output2"; then
-  pass "Stale session cleanup fired on second onboard"
+if grep -q "Reusing existing NemoClaw gateway" <<<"$output2"; then
+  pass "Healthy gateway reused on second onboard"
 else
-  fail "Stale session cleanup did NOT fire (regression: #397)"
+  fail "Healthy gateway was not reused on second onboard"
 fi
 
 if grep -q "Port 8080 is not available" <<<"$output2"; then
@@ -223,10 +223,10 @@ else
   fail "Third onboard exited $exit3 (expected 1)"
 fi
 
-if grep -q "Cleaning up previous NemoClaw session" <<<"$output3"; then
-  pass "Stale session cleanup fired on third onboard"
+if grep -q "Reusing existing NemoClaw gateway" <<<"$output3"; then
+  pass "Healthy gateway reused on third onboard"
 else
-  fail "Stale session cleanup did NOT fire on third onboard"
+  fail "Healthy gateway was not reused on third onboard"
 fi
 
 if grep -q "Port 8080 is not available" <<<"$output3"; then
@@ -245,6 +245,12 @@ if grep -q "Sandbox '${SANDBOX_B}' created" <<<"$output3"; then
   pass "Sandbox '$SANDBOX_B' created"
 else
   fail "Sandbox '$SANDBOX_B' was not created"
+fi
+
+if openshell sandbox get "$SANDBOX_A" >/dev/null 2>&1; then
+  pass "First sandbox '$SANDBOX_A' still exists after creating '$SANDBOX_B'"
+else
+  fail "First sandbox '$SANDBOX_A' disappeared after creating '$SANDBOX_B' (regression: #849)"
 fi
 
 # ══════════════════════════════════════════════════════════════════
