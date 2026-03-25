@@ -253,9 +253,21 @@ function uninstall(args) {
   exitWithSpawnResult(result);
 }
 
-function showStatus() {
+function showStatus({ json = false } = {}) {
   // Show sandbox registry
   const { sandboxes, defaultSandbox } = registry.listSandboxes();
+
+  if (json) {
+    console.log(JSON.stringify({
+      sandboxes: sandboxes.map((sb) => ({
+        name: sb.name,
+        default: sb.name === defaultSandbox,
+        model: sb.model || null,
+      })),
+    }));
+    return;
+  }
+
   if (sandboxes.length > 0) {
     console.log("");
     console.log("  Sandboxes:");
@@ -271,8 +283,23 @@ function showStatus() {
   run(`bash "${SCRIPTS}/start-services.sh" --status`);
 }
 
-function listSandboxes() {
+function listSandboxes({ json = false } = {}) {
   const { sandboxes, defaultSandbox } = registry.listSandboxes();
+
+  if (json) {
+    console.log(JSON.stringify({
+      sandboxes: sandboxes.map((sb) => ({
+        name: sb.name,
+        default: sb.name === defaultSandbox,
+        model: sb.model || null,
+        provider: sb.provider || null,
+        gpuEnabled: sb.gpuEnabled || false,
+        policies: sb.policies || [],
+      })),
+    }));
+    return;
+  }
+
   if (sandboxes.length === 0) {
     console.log("");
     console.log("  No sandboxes registered. Run `nemoclaw onboard` to get started.");
@@ -305,11 +332,29 @@ function sandboxConnect(sandboxName) {
   runInteractive(`openshell sandbox connect ${qn}`);
 }
 
-function sandboxStatus(sandboxName) {
+function sandboxStatus(sandboxName, { json = false } = {}) {
   const sb = registry.getSandbox(sandboxName);
   const live = parseGatewayInference(
     runCapture("openshell inference get 2>/dev/null", { ignoreError: true })
   );
+  const nimStat = sb && sb.nimContainer ? nim.nimStatusByName(sb.nimContainer) : nim.nimStatus(sandboxName);
+
+  if (json) {
+    console.log(JSON.stringify({
+      name: sandboxName,
+      model: (live && live.model) || (sb && sb.model) || null,
+      provider: (live && live.provider) || (sb && sb.provider) || null,
+      gpuEnabled: (sb && sb.gpuEnabled) || false,
+      policies: (sb && sb.policies) || [],
+      nim: {
+        running: nimStat.running,
+        container: nimStat.container || null,
+        healthy: nimStat.healthy || false,
+      },
+    }));
+    return;
+  }
+
   if (sb) {
     console.log("");
     console.log(`  Sandbox: ${sb.name}`);
@@ -323,7 +368,6 @@ function sandboxStatus(sandboxName) {
   run(`openshell sandbox get ${shellQuote(sandboxName)} 2>/dev/null || true`, { ignoreError: true });
 
   // NIM health
-  const nimStat = sb && sb.nimContainer ? nim.nimStatusByName(sb.nimContainer) : nim.nimStatus(sandboxName);
   console.log(`    NIM:      ${nimStat.running ? `running (${nimStat.container})` : "not running"}`);
   if (nimStat.running) {
     console.log(`    Healthy:  ${nimStat.healthy ? "yes" : "no"}`);
@@ -358,9 +402,21 @@ async function sandboxPolicyAdd(sandboxName) {
   policies.applyPreset(sandboxName, answer);
 }
 
-function sandboxPolicyList(sandboxName) {
+function sandboxPolicyList(sandboxName, { json = false } = {}) {
   const allPresets = policies.listPresets();
   const applied = policies.getAppliedPresets(sandboxName);
+
+  if (json) {
+    console.log(JSON.stringify({
+      sandbox: sandboxName,
+      presets: allPresets.map((p) => ({
+        name: p.name,
+        description: p.description,
+        applied: applied.includes(p.name),
+      })),
+    }));
+    return;
+  }
 
   console.log("");
   console.log(`  Policy presets for sandbox '${sandboxName}':`);
@@ -465,10 +521,10 @@ const [cmd, ...args] = process.argv.slice(2);
       case "deploy":      await deploy(args[0]); break;
       case "start":       await start(); break;
       case "stop":        stop(); break;
-      case "status":      showStatus(); break;
+      case "status":      showStatus({ json: args.includes("--json") }); break;
       case "debug":       debug(args); break;
       case "uninstall":   uninstall(args); break;
-      case "list":        listSandboxes(); break;
+      case "list":        listSandboxes({ json: args.includes("--json") }); break;
       case "--version":
       case "-v": {
         const pkg = require(path.join(__dirname, "..", "package.json"));
@@ -489,10 +545,10 @@ const [cmd, ...args] = process.argv.slice(2);
 
     switch (action) {
       case "connect":     sandboxConnect(cmd); break;
-      case "status":      sandboxStatus(cmd); break;
+      case "status":      sandboxStatus(cmd, { json: actionArgs.includes("--json") }); break;
       case "logs":        sandboxLogs(cmd, actionArgs.includes("--follow")); break;
       case "policy-add":  await sandboxPolicyAdd(cmd); break;
-      case "policy-list": sandboxPolicyList(cmd); break;
+      case "policy-list": sandboxPolicyList(cmd, { json: actionArgs.includes("--json") }); break;
       case "destroy":     await sandboxDestroy(cmd, actionArgs); break;
       default:
         console.error(`  Unknown action: ${action}`);
