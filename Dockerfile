@@ -37,6 +37,11 @@ COPY nemoclaw-blueprint/ /opt/nemoclaw-blueprint/
 WORKDIR /opt/nemoclaw
 RUN npm ci --omit=dev
 
+# Pin OpenClaw inside the sandbox image so extension compatibility is immutable.
+ARG OPENCLAW_VERSION=2026.3.26
+ARG OPENCLAW_VOICECALL_SPEC=@openclaw/voice-call@2026.3.26
+RUN npm install -g "openclaw@${OPENCLAW_VERSION}"
+
 # Set up blueprint for local resolution
 RUN mkdir -p /sandbox/.nemoclaw/blueprints/0.1.0 \
     && cp -r /opt/nemoclaw-blueprint/* /sandbox/.nemoclaw/blueprints/0.1.0/
@@ -120,7 +125,9 @@ os.chmod(path, 0o600)"
 
 # Install NemoClaw plugin into OpenClaw
 RUN openclaw doctor --fix > /dev/null 2>&1 || true \
-    && openclaw plugins install /opt/nemoclaw > /dev/null 2>&1 || true
+    && openclaw --yes plugins install /opt/nemoclaw > /dev/null 2>&1 || true \
+    && openclaw --yes plugins install "${OPENCLAW_VOICECALL_SPEC}" --pin > /dev/null \
+    && openclaw --help | grep -Eq '(^|[[:space:]])voicecall([[:space:]]|$)'
 
 # Lock openclaw.json via DAC: chown to root so the sandbox user cannot modify
 # it at runtime.  This works regardless of Landlock enforcement status.
