@@ -38,8 +38,8 @@ WORKDIR /opt/nemoclaw
 RUN npm ci --omit=dev
 
 # Pin OpenClaw inside the sandbox image so extension compatibility is immutable.
-ARG OPENCLAW_VERSION=2026.3.26
-ARG OPENCLAW_VOICECALL_SPEC=@openclaw/voice-call@2026.3.26
+ARG OPENCLAW_VERSION=2026.3.24
+ARG OPENCLAW_VOICECALL_SPEC=@openclaw/voice-call@2026.3.13
 RUN npm install -g "openclaw@${OPENCLAW_VERSION}"
 
 # Set up blueprint for local resolution
