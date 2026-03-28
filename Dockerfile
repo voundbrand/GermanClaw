@@ -40,9 +40,7 @@ RUN npm ci --omit=dev
 # Pin OpenClaw inside the sandbox image so extension compatibility is immutable.
 ARG OPENCLAW_VERSION=2026.3.11
 ARG OPENCLAW_VOICECALL_SPEC=@openclaw/voice-call@2026.3.11
-RUN npm install -g "openclaw@${OPENCLAW_VERSION}" \
-    && rm -rf /usr/local/lib/node_modules/openclaw/node_modules/@node-llama-cpp \
-              /usr/local/lib/node_modules/openclaw/node_modules/node-llama-cpp* \
+RUN npm install -g --omit=optional "openclaw@${OPENCLAW_VERSION}" \
     && (npm cache clean --force > /dev/null 2>&1 || true)
 
 # Set up blueprint for local resolution
