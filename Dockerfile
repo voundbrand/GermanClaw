@@ -124,8 +124,9 @@ json.dump(config, open(path, 'w'), indent=2); \
 os.chmod(path, 0o600)"
 
 # Install NemoClaw plugin into OpenClaw
-RUN openclaw doctor --fix > /dev/null 2>&1 || true \
-    && openclaw plugins install /opt/nemoclaw > /dev/null 2>&1 || true \
+RUN export OPENCLAW_STATE_DIR=/sandbox/.openclaw-data \
+    && (openclaw doctor --fix > /dev/null 2>&1 || true) \
+    && (openclaw plugins install /opt/nemoclaw > /dev/null 2>&1 || true) \
     && openclaw plugins install "${OPENCLAW_VOICECALL_SPEC}" --pin > /dev/null \
     && openclaw --help | grep -Eq '(^|[[:space:]])voicecall([[:space:]]|$)'
 
