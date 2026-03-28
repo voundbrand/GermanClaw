@@ -45,6 +45,12 @@ RUN openclaw --version >/dev/null
 RUN mkdir -p /sandbox/.nemoclaw/blueprints/0.1.0 \
     && cp -r /opt/nemoclaw-blueprint/* /sandbox/.nemoclaw/blueprints/0.1.0/
 
+# Voice-call runtime writes call logs under ~/.openclaw/voice-calls.
+# Keep the immutable config directory read-only by routing it to writable state.
+RUN mkdir -p /sandbox/.openclaw-data/voice-calls \
+    && (test -L /sandbox/.openclaw/voice-calls || ln -s /sandbox/.openclaw-data/voice-calls /sandbox/.openclaw/voice-calls) \
+    && chown -R sandbox:sandbox /sandbox/.openclaw-data/voice-calls
+
 # Copy startup script
 COPY scripts/nemoclaw-start.sh /usr/local/bin/nemoclaw-start
 RUN chmod +x /usr/local/bin/nemoclaw-start

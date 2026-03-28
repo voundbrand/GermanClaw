@@ -100,6 +100,7 @@ RUN mkdir -p /sandbox/.openclaw-data/agents/main/agent \
         /sandbox/.openclaw-data/identity \
         /sandbox/.openclaw-data/devices \
         /sandbox/.openclaw-data/canvas \
+        /sandbox/.openclaw-data/voice-calls \
         /sandbox/.openclaw-data/cron \
     && mkdir -p /sandbox/.openclaw \
     && ln -s /sandbox/.openclaw-data/agents /sandbox/.openclaw/agents \
@@ -110,6 +111,7 @@ RUN mkdir -p /sandbox/.openclaw-data/agents/main/agent \
     && ln -s /sandbox/.openclaw-data/identity /sandbox/.openclaw/identity \
     && ln -s /sandbox/.openclaw-data/devices /sandbox/.openclaw/devices \
     && ln -s /sandbox/.openclaw-data/canvas /sandbox/.openclaw/canvas \
+    && ln -s /sandbox/.openclaw-data/voice-calls /sandbox/.openclaw/voice-calls \
     && ln -s /sandbox/.openclaw-data/cron /sandbox/.openclaw/cron \
     && touch /sandbox/.openclaw-data/update-check.json \
     && ln -s /sandbox/.openclaw-data/update-check.json /sandbox/.openclaw/update-check.json \
