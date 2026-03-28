@@ -127,12 +127,8 @@ os.chmod(path, 0o600)"
 RUN export OPENCLAW_STATE_DIR=/sandbox/.openclaw-data \
     && (openclaw doctor --fix > /dev/null 2>&1 || true) \
     && (openclaw plugins install /opt/nemoclaw > /dev/null 2>&1 || true) \
-    && if openclaw --help | grep -Eq '(^|[[:space:]])voicecall([[:space:]]|$)'; then \
-         true; \
-       else \
-         (openclaw plugins install "${OPENCLAW_VOICECALL_SPEC}" --pin > /dev/null 2>&1 || true); \
-       fi \
-    && openclaw --help | grep -Eq '(^|[[:space:]])voicecall([[:space:]]|$)'
+    && (openclaw plugins install "${OPENCLAW_VOICECALL_SPEC}" --pin > /dev/null 2>&1 || true) \
+    && openclaw voicecall --help | grep -Eq '^Usage:[[:space:]]+openclaw[[:space:]]+voicecall'
 
 # Lock openclaw.json via DAC: chown to root so the sandbox user cannot modify
 # it at runtime.  This works regardless of Landlock enforcement status.
