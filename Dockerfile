@@ -37,13 +37,9 @@ COPY nemoclaw-blueprint/ /opt/nemoclaw-blueprint/
 WORKDIR /opt/nemoclaw
 RUN npm ci --omit=dev
 
-# Pin OpenClaw inside the sandbox image so extension compatibility is immutable.
-ARG OPENCLAW_VERSION=2026.3.11
+# Reuse OpenClaw pinned in the base image and only pin the voice-call plugin.
 ARG OPENCLAW_VOICECALL_SPEC=@openclaw/voice-call@2026.3.11
-RUN npm install -g "openclaw@${OPENCLAW_VERSION}" \
-    && rm -rf /usr/local/lib/node_modules/openclaw/node_modules/@node-llama-cpp \
-              /usr/local/lib/node_modules/openclaw/node_modules/node-llama-cpp* \
-    && (npm cache clean --force > /dev/null 2>&1 || true)
+RUN openclaw --version >/dev/null
 
 # Set up blueprint for local resolution
 RUN mkdir -p /sandbox/.nemoclaw/blueprints/0.1.0 \
