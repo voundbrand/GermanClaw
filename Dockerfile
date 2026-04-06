@@ -32,10 +32,20 @@ COPY --from=builder /opt/nemoclaw/dist/ /opt/nemoclaw/dist/
 COPY nemoclaw/openclaw.plugin.json /opt/nemoclaw/
 COPY nemoclaw/package.json nemoclaw/package-lock.json /opt/nemoclaw/
 COPY nemoclaw-blueprint/ /opt/nemoclaw-blueprint/
+COPY vendor/openclaw-voice-call/ /opt/openclaw-voice-call/
 
 # Install runtime dependencies only (no devDependencies, no build step)
 WORKDIR /opt/nemoclaw
 RUN npm ci --omit=dev
+
+# Reinstall OpenClaw in the runtime layer so we can run a host version that
+# is compatible with the vendored voice-call plugin contract.
+ARG OPENCLAW_CLI_SPEC=openclaw@2026.4.5
+ARG OPENCLAW_VOICECALL_SPEC=/opt/openclaw-voice-call
+RUN npm_config_optional=false npm install -g "${OPENCLAW_CLI_SPEC}" \
+    && rm -rf /usr/local/lib/node_modules/openclaw/node_modules/@node-llama-cpp \
+              /usr/local/lib/node_modules/openclaw/node_modules/node-llama-cpp* \
+    && (npm cache clean --force > /dev/null 2>&1 || true)
 
 # Set up blueprint for local resolution
 RUN mkdir -p /sandbox/.nemoclaw/blueprints/0.1.0 \
@@ -119,8 +129,12 @@ json.dump(config, open(path, 'w'), indent=2); \
 os.chmod(path, 0o600)"
 
 # Install NemoClaw plugin into OpenClaw
-RUN openclaw doctor --fix > /dev/null 2>&1 || true \
-    && openclaw plugins install /opt/nemoclaw > /dev/null 2>&1 || true
+RUN export OPENCLAW_STATE_DIR=/sandbox/.openclaw-data \
+    && (openclaw doctor --fix > /dev/null 2>&1 || true) \
+    && (openclaw plugins install /opt/nemoclaw > /dev/null 2>&1 || true) \
+    && (openclaw plugins install "${OPENCLAW_VOICECALL_SPEC}" --pin > /dev/null 2>&1 || true) \
+    && openclaw voicecall --help | grep -Eq '^Usage:[[:space:]]+openclaw[[:space:]]+voicecall' \
+    && openclaw voicecall --help | grep -Eq 'outcomes|kanzlei-pipeline|kanzlei-pipeline-process'
 
 # Lock openclaw.json via DAC: chown to root so the sandbox user cannot modify
 # it at runtime.  This works regardless of Landlock enforcement status.
