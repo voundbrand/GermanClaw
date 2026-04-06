@@ -34,6 +34,12 @@ COPY nemoclaw/package.json nemoclaw/package-lock.json /opt/nemoclaw/
 COPY nemoclaw-blueprint/ /opt/nemoclaw-blueprint/
 COPY vendor/openclaw-voice-call/ /opt/openclaw-voice-call/
 
+# Build vendored voice-call plugin to dist JS so the runtime loads
+# deterministic Kanzlei commands from compiled extension entrypoints.
+WORKDIR /opt/openclaw-voice-call
+RUN npm install --omit=dev \
+    && npx --yes esbuild@0.25.9 index.ts --bundle --platform=node --format=esm --target=node22 --external:openclaw --external:openclaw/* --outfile=dist/index.js
+
 # Install runtime dependencies only (no devDependencies, no build step)
 WORKDIR /opt/nemoclaw
 RUN npm ci --omit=dev
