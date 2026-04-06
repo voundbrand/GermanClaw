@@ -1767,6 +1767,10 @@ async function createSandbox(gpu, model, provider, preferredInferenceApi = null,
   copyBuildContextDir(path.join(ROOT, "nemoclaw"), path.join(buildCtx, "nemoclaw"));
   copyBuildContextDir(path.join(ROOT, "nemoclaw-blueprint"), path.join(buildCtx, "nemoclaw-blueprint"));
   copyBuildContextDir(path.join(ROOT, "scripts"), path.join(buildCtx, "scripts"));
+  const vendorDir = path.join(ROOT, "vendor");
+  if (fs.existsSync(vendorDir)) {
+    copyBuildContextDir(vendorDir, path.join(buildCtx, "vendor"));
+  }
 
   // Create sandbox (use -- echo to avoid dropping into interactive shell)
   // Pass the base policy so sandbox starts in proxy mode (required for policy updates later)
