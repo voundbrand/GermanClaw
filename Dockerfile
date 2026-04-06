@@ -51,6 +51,7 @@ ARG OPENCLAW_VOICECALL_SPEC=/opt/openclaw-voice-call
 RUN npm install -g "${OPENCLAW_CLI_SPEC}" \
     && rm -rf /usr/local/lib/node_modules/openclaw/node_modules/@node-llama-cpp \
               /usr/local/lib/node_modules/openclaw/node_modules/node-llama-cpp* \
+              /usr/local/lib/node_modules/openclaw/dist/extensions/voice-call \
     && (npm cache clean --force > /dev/null 2>&1 || true)
 
 # Set up blueprint for local resolution
