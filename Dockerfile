@@ -42,7 +42,7 @@ RUN npm ci --omit=dev
 # is compatible with the vendored voice-call plugin contract.
 ARG OPENCLAW_CLI_SPEC=openclaw@2026.4.5
 ARG OPENCLAW_VOICECALL_SPEC=/opt/openclaw-voice-call
-RUN npm_config_optional=false npm install -g "${OPENCLAW_CLI_SPEC}" \
+RUN npm install -g "${OPENCLAW_CLI_SPEC}" \
     && rm -rf /usr/local/lib/node_modules/openclaw/node_modules/@node-llama-cpp \
               /usr/local/lib/node_modules/openclaw/node_modules/node-llama-cpp* \
     && (npm cache clean --force > /dev/null 2>&1 || true)
@@ -132,7 +132,7 @@ os.chmod(path, 0o600)"
 RUN export OPENCLAW_STATE_DIR=/sandbox/.openclaw-data \
     && (openclaw doctor --fix > /dev/null 2>&1 || true) \
     && (openclaw plugins install /opt/nemoclaw > /dev/null 2>&1 || true) \
-    && (openclaw plugins install "${OPENCLAW_VOICECALL_SPEC}" --pin > /dev/null 2>&1 || true) \
+    && (openclaw plugins install "${OPENCLAW_VOICECALL_SPEC}" --pin --dangerously-force-unsafe-install > /dev/null 2>&1 || true) \
     && openclaw voicecall --help | grep -Eq '^Usage:[[:space:]]+openclaw[[:space:]]+voicecall' \
     && openclaw voicecall --help | grep -Eq 'outcomes|kanzlei-pipeline|kanzlei-pipeline-process'
 
